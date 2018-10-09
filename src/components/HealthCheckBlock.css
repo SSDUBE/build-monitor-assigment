@@ -1,0 +1,35 @@
+.container {
+    margin: 20px;
+    margin-bottom: 0;
+    position: relative;
+    display: inline-blockStyle;
+}
+
+.container .blockStyle {
+    position: relative;
+    padding: 10px;
+    width: 80%;
+    border-top: 5px solid orange;
+    border-bottom: 2px solid #ccc;
+    color: white;
+    font-family: georgia;
+    font-size: 14px;
+    line-height: 1.5;
+    box-shadow: inset 0 0 5px #333;
+}
+
+.container .blockStyle:hover {
+    cursor: pointer;
+}
+
+.container .blockStyle.green {
+    background: green; 
+}
+
+.container .blockStyle.red {
+    background: red; 
+}
+
+.container .blockStyle.grey {
+    background: grey;
+}
