@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import HealthCheckBlock from './components/HealthCheckBlock'
 import request from 'request';
+import bowser  from 'bowser';
+
+const browser = bowser.getParser(window.navigator.userAgent);
+const browserVersion = browser.getBrowser().version;
 
 class App extends Component {
     state = {
@@ -17,14 +21,8 @@ class App extends Component {
         status: null,
         lastServerData: null
       }),
-      endPointData: Array(6).fill(null),
+      endPointData: Array(6).fill(null)
     }
-
-  componentDidMount() {
-    setInterval(() => {
-      return this.serverHealthCheck(this.state.listOfEndPoints);
-    }, 5000)
-  }
 
   healthCheckStatus = (url, index) => {
     request({ uri: url, method: 'GET' },  (error, response, body) => {
@@ -55,17 +53,29 @@ class App extends Component {
 
   serverHealthCheck = (endPoints) => {
     endPoints.map((url, index) => {
-      this.healthCheckStatus(url, index);
+      return this.healthCheckStatus(url, index);
     });
   }
 
+  componentDidMount() {
+    if (browser.getBrowserName() === 'Chrome' && browserVersion) {
+      setInterval(() => {
+        return this.serverHealthCheck(this.state.listOfEndPoints);
+      }, 5000)
+    }
+  }
+
   render() {
-    return (
-      <div className='container'>
-        { this.state.block.map((data, index) =>
-            <HealthCheckBlock key={index} data={data}/>
+    const processData = (browser.getBrowserName() !== 'Chrome' && browserVersion) ?
+    <div>browser Not Supported</div> :
+    <div className='container'>
+        { this.state.block.map((data, index) => {
+            return <HealthCheckBlock key={index} data={data}/>
+          }
         )}
       </div>
+    return (
+      processData
     );
   }
 }
